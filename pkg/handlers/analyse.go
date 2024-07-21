@@ -8,9 +8,10 @@ import (
 )
 
 type AnalysisResultPage struct {
-	Title  string
-	Url    string
-	Result *model.Analysis
+	Title    string
+	Url      string
+	Result   *model.Analysis
+	IsResult bool
 }
 
 func AnalyseHandler(w http.ResponseWriter, r *http.Request) {
@@ -37,9 +38,10 @@ func AnalyseHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	p := AnalysisResultPage{
-		Title:  "Analysis",
-		Url:    pageURL,
-		Result: result,
+		Title:    "Analysis",
+		Url:      pageURL,
+		Result:   result,
+		IsResult: true,
 	}
 	t, err := template.ParseFiles("pkg/pages/analysis.html")
 	if err != nil {

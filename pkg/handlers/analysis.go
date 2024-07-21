@@ -6,7 +6,8 @@ import (
 )
 
 type AnalysisPage struct {
-	Title string
+	Title    string
+	IsResult bool
 }
 
 func (h AnalysisPage) GetTitle(_ *http.Request) string {

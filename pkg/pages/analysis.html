@@ -2,12 +2,12 @@
 
 <form action="/analyse" method="POST">
     <div><label> URL
-        <input name="url" type="url" value="{{.Url}}">
+        <input name="url" type="url" {{if .IsResult}}value="{{.Url}}"{{end}}>
     </label></div>
     <div><input type="submit" value="Analyse"></div>
 </form>
 
-{{if .Result}}
+{{if .IsResult}}
 <div>
     <h2>{{.Url}}</h2>
     <div>
