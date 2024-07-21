@@ -2,7 +2,35 @@
 
 <form action="/analyse" method="POST">
     <div><label> URL
-        <input name="url" type="url">
+        <input name="url" type="url" value="{{.Url}}">
     </label></div>
     <div><input type="submit" value="Analyse"></div>
 </form>
+
+{{if .Result}}
+<div>
+    <h2>{{.Url}}</h2>
+    <div>
+        <div><label>HTML Version: </label><b>{{.Result.Version}}</b></div>
+        <div><label>Page Title: </label><b>{{.Result.Title}}</b></div>
+        <div><label>Headings: </label>
+            <ul>
+                {{range $key, $value := .Result.Headings}}
+                    <li><b>{{$key}}: {{$value}}</b></li>
+                {{end}}
+            </ul>
+        </div>
+        <div><label>Links: </label>
+            <ul>
+                <li><b>Internal: {{.Result.Links.Internal}}</b></li>
+                <li><b>External: {{.Result.Links.External}}</b></li>
+                <li><b>Inaccessible: {{.Result.Links.Inaccessible}}</b></li>
+            </ul>
+        </div>
+        <div><label>Has Login Form: </label>
+            <input type="checkbox" {{if .Result.HasLogin}}checked="checked"{{end}} disabled="disabled">
+        </div>
+    </div>
+</div>
+{{else}}
+{{end}}

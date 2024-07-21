@@ -1,8 +1,17 @@
 package handlers
 
 import (
+	"html/template"
 	"net/http"
+	"web-page-analyser/pkg/analyse"
+	"web-page-analyser/pkg/model"
 )
+
+type AnalysisResultPage struct {
+	Title  string
+	Url    string
+	Result *model.Analysis
+}
 
 func AnalyseHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -21,20 +30,26 @@ func AnalyseHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = analyseUrl(r.Form.Get("url"))
+	result, statusCode, err := analyse.AnalyseUrl(r.Form.Get("url"))
+	if err != nil {
+		http.Error(w, err.Error(), statusCode)
+		return
+	}
+
+	p := AnalysisResultPage{
+		Title:  "Analysis",
+		Url:    pageURL,
+		Result: result,
+	}
+	t, err := template.ParseFiles("pkg/pages/analysis.html")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-
-	_, err = w.Write([]byte("Analyse: " + r.Form.Get("url")))
+	err = t.Execute(w, p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	return
-}
-
-func analyseUrl(pageURL string) error {
-	return nil
 }
